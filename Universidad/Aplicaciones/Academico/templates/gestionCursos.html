@@ -1,0 +1,69 @@
+{% extends "./base.html" %}
+
+{% block tittle %}
+    Gestion de cursos
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="btn-close" data-dismiss="alert"></button>
+                <strong class="text-dark">{{ message }}</strong>
+                
+            </div>
+            {% endfor %}
+            {% endif %}
+            <h2>Gestion de cursos</h2>
+            <div class="card">
+                <div class="card-body">
+                    <form action="/registrarCurso/" method="post">{% csrf_token %} <!--CSRF (cross-site request forgery) exploit malicioso en el cual un cliente (form) no autorizado transmite datos al server-->
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="txtCodigo" name="txtCodigo" placeholder="Código" minlength="6" maxlength="6" required>
+                        </div><br>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="txtNombre" name="txtNombre" placeholder="Nombre" maxlength="50" required>
+                        </div><br>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="txtCreditos" name="numCreditos" minlength="1" maxlength="9" value="1" required>
+                        </div><br>
+                        <div class="form-group d-grid gap-2 col-6 mx-auto">
+                            <button class="btn btn-success text-white" type="submit">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
+            <h1>Listado Cursos</h1>
+            <div class="table-responsive py-2">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Codigo</th>
+                            <th>Nombre</th>
+                            <th>Creditos</th>
+                            <th colspan="2">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in cursos %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{c.codigo}}</td>
+                            <td>{{c.nombre}}</td>
+                            <td>{{c.creditos}}</td>
+                            <td><a href="edicionCurso/{{c.codigo}}" class="btn btn-info">Editar</a></td>
+                            <td><a href="eliminarCurso/{{c.codigo}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
